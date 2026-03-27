@@ -14,6 +14,8 @@ import { RunnersPage } from '../pages/RunnersPage';
 import { TerminalPage } from '../pages/TerminalPage';
 import { VerifyPage } from '../pages/VerifyPage';
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage';
+import { ImprintPage } from '../pages/ImprintPage';
+import { PrivacyPage } from '../pages/PrivacyPage';
 
 function RootRedirect() {
   const { currentUser, isReady } = useAppState();
@@ -44,6 +46,8 @@ export function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<RootRedirect />} />
+        <Route path="/impressum" element={<ImprintPage />} />
+        <Route path="/datenschutz" element={<PrivacyPage />} />
 
         <Route element={<PublicOnly />}>
           <Route path="/login" element={<LoginPage />} />

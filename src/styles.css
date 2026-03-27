@@ -870,6 +870,44 @@ img {
   padding: calc(var(--topbar-height) + 1.7rem) 1.5rem 7rem 1.5rem;
 }
 
+.legal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: min(100%, 1760px);
+  margin: 0 auto;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.legal-footer-label {
+  color: rgba(169, 255, 223, 0.78);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.legal-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.legal-footer-links a {
+  color: rgba(255, 251, 254, 0.72);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.legal-footer-links a:hover {
+  color: var(--color-mint);
+}
+
 .mobile-nav {
   display: none;
 }
@@ -1553,6 +1591,82 @@ img {
   align-items: center;
 }
 
+.legal-shell {
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.legal-topbar {
+  max-width: 1760px;
+  margin: 0 auto;
+}
+
+.legal-main {
+  padding: 1rem 0 2rem;
+}
+
+.legal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.legal-panel {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.legal-panel h2,
+.legal-panel p {
+  margin: 0;
+}
+
+.legal-panel h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.legal-panel p {
+  color: rgba(255, 251, 254, 0.76);
+  line-height: 1.8;
+}
+
+.legal-list {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.legal-list > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(169, 255, 223, 0.09);
+}
+
+.legal-list span {
+  color: rgba(173, 170, 173, 0.82);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.legal-list strong {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.92rem;
+  letter-spacing: 0.05em;
+}
+
+.legal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 @media (max-width: 1180px) {
   .topbar-nav {
     display: none;
@@ -1584,6 +1698,10 @@ img {
   }
 
   .auth-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1683,7 +1801,8 @@ img {
 
 @media (max-width: 640px) {
   .auth-shell,
-  .app-content {
+  .app-content,
+  .legal-shell {
     padding-left: 0.85rem;
     padding-right: 0.85rem;
   }
@@ -1717,6 +1836,13 @@ img {
 
   .form-actions {
     grid-template-columns: 1fr;
+  }
+
+  .legal-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
   }
 
   .public-hero {

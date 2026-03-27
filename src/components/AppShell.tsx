@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import { BETA_MODE, useAppState } from '../state/AppState';
 import { BrandLockup, MaterialIcon, cx } from './ui';
 
@@ -51,6 +51,14 @@ export function AppShell() {
       <main className="app-content">
         <Outlet />
       </main>
+
+      <footer className="legal-footer">
+        <span className="legal-footer-label">LEGAL</span>
+        <div className="legal-footer-links">
+          <Link to="/impressum">IMPRESSUM</Link>
+          <Link to="/datenschutz">DATENSCHUTZ</Link>
+        </div>
+      </footer>
 
       <nav className="mobile-nav">
         {navigation.map((item) => (

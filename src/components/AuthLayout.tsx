@@ -1,4 +1,5 @@
 import type { PropsWithChildren, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { BrandLockup, Panel } from './ui';
 
 export function AuthLayout({
@@ -38,6 +39,14 @@ export function AuthLayout({
 
         <Panel className="auth-form-panel">{children}</Panel>
       </main>
+
+      <footer className="legal-footer">
+        <span className="legal-footer-label">LEGAL</span>
+        <div className="legal-footer-links">
+          <Link to="/impressum">IMPRESSUM</Link>
+          <Link to="/datenschutz">DATENSCHUTZ</Link>
+        </div>
+      </footer>
     </div>
   );
 }
