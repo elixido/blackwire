@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <rect width="256" height="256" fill="#0e0e10" />
+  <path d="M24 34h208v8H24z" fill="#a9ffdf" fill-opacity=".18" />
+  <path d="M32 208h192v8H32z" fill="#ff51fa" fill-opacity=".18" />
+  <text x="28" y="116" fill="#a9ffdf" font-family="Space Grotesk, Arial, sans-serif" font-size="78" font-style="italic" font-weight="800">B</text>
+  <text x="104" y="162" fill="#ff51fa" font-family="Space Grotesk, Arial, sans-serif" font-size="78" font-style="italic" font-weight="800">W</text>
+  <path d="M26 184h76" stroke="#a9ffdf" stroke-width="8" />
+  <path d="M158 72h70" stroke="#ff51fa" stroke-width="8" />
+</svg>

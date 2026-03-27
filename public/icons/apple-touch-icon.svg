@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <rect width="180" height="180" rx="32" fill="#0e0e10" />
+  <rect x="14" y="14" width="152" height="152" rx="24" fill="none" stroke="#a9ffdf" stroke-opacity=".32" stroke-width="2" />
+  <text x="28" y="84" fill="#a9ffdf" font-family="Space Grotesk, Arial, sans-serif" font-size="60" font-style="italic" font-weight="800">B</text>
+  <text x="78" y="128" fill="#ff51fa" font-family="Space Grotesk, Arial, sans-serif" font-size="60" font-style="italic" font-weight="800">W</text>
+</svg>
