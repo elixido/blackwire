@@ -3,7 +3,7 @@ import path from 'node:path';
 
 dotenv.config();
 
-const projectRoot = path.resolve(__dirname, '..', '..');
+const projectRoot = process.cwd();
 const serverRoot = path.join(projectRoot, 'server');
 
 function readNumber(value: string | undefined, fallback: number) {
