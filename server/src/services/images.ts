@@ -85,7 +85,9 @@ export async function processAvatarInput(
     });
 
   if (error) {
-    fail(500, 'AVATAR_UPLOAD_FAILED', 'Runner avatar upload failed.');
+    console.warn('Supabase avatar upload failed, falling back to embedded data URL.', error);
+    await deleteManagedUpload(previousValue);
+    return `data:image/webp;base64,${outputBuffer.toString('base64')}`;
   }
 
   await deleteManagedUpload(previousValue);
