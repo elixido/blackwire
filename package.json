@@ -10,8 +10,8 @@
     "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
     "dev:client": "vite",
     "dev:server": "tsx watch server/src/index.ts",
-    "build": "tsc -b && vite build && tsc -p tsconfig.server.json",
-    "build:server": "tsc -p tsconfig.server.json",
+    "build": "tsc -b && vite build && tsc -p tsconfig.server.json && node scripts/write-server-package.cjs",
+    "build:server": "tsc -p tsconfig.server.json && node scripts/write-server-package.cjs",
     "preview": "vite preview",
     "start": "node server/dist/server/src/index.js"
   },
