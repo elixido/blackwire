@@ -1,21 +1,39 @@
 # BLACKWIRE
 
-Cyberpunk Jobboard fuer Shadowrun 6. Edition.
+Cyberpunk-Jobboard fuer Shadowrun 6. Edition.
 
 ## Stack
 
 - React
 - TypeScript
 - Vite
-- React Router
+- Express
+- PostgreSQL via Supabase
+- Supabase Storage
 - PWA via `vite-plugin-pwa`
-- Lokaler Zustand per `localStorage`
 
 ## Start
 
 ```bash
 npm install
 npm run dev
+```
+
+## Beta-Status
+
+Die aktuelle Version ist fuer eine Beta-Phase vorbereitet:
+
+- Registrierung schaltet Accounts sofort frei
+- Mail-Verifizierung ist in der Beta deaktiviert
+- Passwort-Reset ist in der Beta deaktiviert
+- Daten liegen in Supabase
+- Runner-Bilder laufen ueber Supabase Storage
+
+## Produktion
+
+```bash
+npm run build
+npm run start
 ```
 
 ## Demo Login
@@ -26,7 +44,6 @@ npm run dev
 ## Enthalten
 
 - Login und Registrierung
-- Geschuetzter App-Bereich mit Desktop- und Mobile-Navigation
 - Jobs-Board mit Filtern
 - Job-Detailseite mit Bewerbungs- und Review-Flow
 - Job erstellen und bearbeiten
@@ -37,13 +54,12 @@ npm run dev
 - Terminal-Aktivitaetsfeed
 - PWA-Manifest fuer spaetere App-Installation
 
-## Fuer die spaetere Online-Version
+## Fuer den spaeteren Full Launch
 
-Folgende Punkte sind in dieser ersten Frontend-Version vorbereitet, aber noch nicht an ein echtes Backend angeschlossen:
+Folgende Punkte koennen nach der Beta noch aktiviert oder erweitert werden:
 
-- echte Registrierung mit Mail-Bestaetigung
-- persistente Datenbank
-- serverseitige Authentifizierung
+- echte Mail-Bestaetigung
+- Passwort-Reset per Mail
 - Push-Benachrichtigungen bei neuen Bewerbungen
-- Datei-Storage fuer Runner-Bilder
-- Deployment auf einem Hosting-Service
+- Moderation und Meldesystem
+- Impressum, Datenschutz und Terms
