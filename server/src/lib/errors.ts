@@ -49,6 +49,31 @@ export function errorHandler(
     });
   }
 
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'code' in error &&
+    typeof (error as { code?: unknown }).code === 'string'
+  ) {
+    const code = (error as { code: string }).code;
+
+    if (code === '23505') {
+      return res.status(409).json({
+        ok: false,
+        code: 'UNIQUE_CONSTRAINT_CONFLICT',
+        message: 'This record already exists. Try a different mail address or display name.'
+      });
+    }
+
+    if (code === '42703') {
+      return res.status(500).json({
+        ok: false,
+        code: 'DATABASE_SCHEMA_OUTDATED',
+        message: 'The node schema is updating. Please try again in a moment.'
+      });
+    }
+  }
+
   console.error(error);
   return res.status(500).json({
     ok: false,
