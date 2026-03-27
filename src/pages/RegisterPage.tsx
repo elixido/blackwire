@@ -70,7 +70,7 @@ export function RegisterPage() {
       subtitle="Unique aliases are locked permanently. Discord and one extra social handle stay visible on the public dossier."
       warning={
         BETA_MODE
-          ? 'Beta mode active. Registration unlocks the account immediately. Mail confirmation comes later for the final launch.'
+          ? 'Alpha FNF mode active. Registration unlocks the account immediately. Mail confirmation comes later for the public launch.'
           : 'After registration, a security code must be confirmed before the account can log in.'
       }
     >
@@ -165,7 +165,7 @@ export function RegisterPage() {
         </label>
 
         <p className="inline-status">
-          {status || (BETA_MODE ? 'BETA_ACCESS: ACCOUNT_UNLOCKS_IMMEDIATELY' : 'DISPLAY_NAMES_ARE_UNIQUE_AND_LOCKED')}
+          {status || (BETA_MODE ? 'ALPHA_FNF_ACCESS: ACCOUNT_UNLOCKS_IMMEDIATELY' : 'DISPLAY_NAMES_ARE_UNIQUE_AND_LOCKED')}
         </p>
 
         <div className="form-actions">

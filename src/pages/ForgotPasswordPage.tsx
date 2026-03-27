@@ -21,7 +21,7 @@ export function ForgotPasswordPage() {
   if (BETA_MODE) {
     return (
       <AuthLayout
-        code="BETA_RESET_LOCK"
+        code="ALPHA_FNF_RESET_LOCK"
         title={
           <>
             PASSWORD_RESET
@@ -29,11 +29,11 @@ export function ForgotPasswordPage() {
             <span className="title-accent-pink">OFFLINE</span>
           </>
         }
-        subtitle="Password reset is disabled during the current beta."
-        warning="For the beta phase, contact the operator if an account needs to be reset."
+        subtitle="Password reset is disabled during the current alpha FNF phase."
+        warning="For the alpha FNF phase, contact the operator if an account needs to be reset."
       >
         <div className="form-stack">
-          <p className="inline-status">BETA_PASSWORD_RESET_DISABLED</p>
+          <p className="inline-status">ALPHA_FNF_PASSWORD_RESET_DISABLED</p>
           <div className="form-actions">
             <ActionButton to="/login" tone="mint">
               RETURN_TO_LOGIN

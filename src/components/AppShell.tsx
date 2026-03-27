@@ -31,7 +31,7 @@ export function AppShell() {
         </div>
 
         <div className="topbar-right">
-          {BETA_MODE ? <span className="topbar-beta-pill">BETA</span> : null}
+          {BETA_MODE ? <span className="topbar-beta-pill">ALPHA_FNF</span> : null}
           <NavLink to="/account" className="topbar-account-link">
             {currentUser?.displayName}
           </NavLink>

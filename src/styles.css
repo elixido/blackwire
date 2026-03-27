@@ -1236,6 +1236,23 @@ img {
   flex: 1;
 }
 
+.public-runner-risk {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgba(169, 255, 223, 0.86);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.public-runner-risk strong {
+  color: var(--color-amber);
+}
+
 .application-copy h3,
 .public-runner-copy h3,
 .public-job-row h3 {

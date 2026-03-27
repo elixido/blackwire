@@ -104,6 +104,10 @@ export function PublicProfilePage() {
                         </StatusTag>
                       ))}
                     </div>
+                    <div className="public-runner-risk">
+                      <span>RISK_LEVEL</span>
+                      <strong>{runner.riskLevel.toUpperCase()}</strong>
+                    </div>
                     <ProgressBar value={riskScore(runner.riskLevel)} tone="mint" />
                   </div>
                 </div>

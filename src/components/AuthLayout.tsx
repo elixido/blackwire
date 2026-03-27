@@ -19,7 +19,7 @@ export function AuthLayout({
         <BrandLockup />
         <div className="auth-status">
           <p>SYSTEM_STATUS</p>
-          <strong>BETA_NODE_ACTIVE</strong>
+          <strong>ALPHA_FNF_NODE</strong>
         </div>
       </header>
 

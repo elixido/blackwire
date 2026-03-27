@@ -23,7 +23,7 @@ export function VerifyPage() {
   if (BETA_MODE) {
     return (
       <AuthLayout
-        code="BETA_ACCESS_GATE"
+        code="ALPHA_FNF_ACCESS_GATE"
         title={
           <>
             VERIFY_NODE
@@ -31,11 +31,11 @@ export function VerifyPage() {
             <span className="title-accent-pink">SKIPPED</span>
           </>
         }
-        subtitle="Account mail verification is disabled during the current beta."
+        subtitle="Account mail verification is disabled during the current alpha FNF phase."
         warning="Test accounts are unlocked immediately. Return to login or create a fresh account."
       >
         <div className="form-stack">
-          <p className="inline-status">BETA_MODE_SKIPS_EMAIL_VERIFICATION</p>
+          <p className="inline-status">ALPHA_FNF_SKIPS_EMAIL_VERIFICATION</p>
           <div className="form-actions">
             <ActionButton to="/login" tone="mint">
               RETURN_TO_LOGIN

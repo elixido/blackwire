@@ -63,7 +63,7 @@ export function LoginPage() {
       subtitle="Verified handles only. Use alias or mail address to enter the node."
       warning={
         BETA_MODE
-          ? 'Beta mode active. New accounts are unlocked immediately so testers can enter without mail confirmation.'
+          ? 'Alpha FNF mode active. New accounts are unlocked immediately so invited testers can enter without mail confirmation.'
           : 'New accounts require the mailed security code before the first login.'
       }
     >
@@ -93,7 +93,7 @@ export function LoginPage() {
         </label>
 
         <p className="inline-status">
-          {status || (BETA_MODE ? 'BETA_MODE: REGISTER_AND_ENTER_IMMEDIATELY' : 'DEMO_LOGIN: K1LL_SWITCH / blackwire')}
+          {status || (BETA_MODE ? 'ALPHA_FNF: REGISTER_AND_ENTER_IMMEDIATELY' : 'DEMO_LOGIN: K1LL_SWITCH / blackwire')}
         </p>
 
         <div className="form-actions">
