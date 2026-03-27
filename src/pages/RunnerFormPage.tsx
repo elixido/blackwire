@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ActionButton, AvatarFrame, Panel, SectionTitle, StatusTag } from '../components/ui';
 import { parseTags, riskScore, serializeTags } from '../lib/format';
@@ -25,6 +25,8 @@ export function RunnerFormPage() {
   const isEditing = Boolean(existing);
 
   const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const [form, setForm] = useState(() => ({
     streetName: existing?.streetName ?? '',
     realName: existing?.realName ?? '',
@@ -47,6 +49,10 @@ export function RunnerFormPage() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submittingRef.current) {
+      return;
+    }
+
     if (!form.streetName.trim() || !form.metatype.trim() || !form.summary.trim()) {
       setStatus('MISSING_REQUIRED_FIELDS');
       return;
@@ -68,12 +74,18 @@ export function RunnerFormPage() {
       avatar: form.avatar
     };
 
+    submittingRef.current = true;
+    setIsSubmitting(true);
+
     let next = null;
     try {
       next = isEditing && existing ? await updateRunner(existing.id, draft) : await createRunner(draft);
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'DOSSIER_WRITE_FAILED');
       return;
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
     }
 
     if (!next) {
@@ -262,8 +274,8 @@ export function RunnerFormPage() {
           <p className="inline-status">{status || 'SAVE_CONFIRMS_THIS_DOSSIER'}</p>
 
           <div className="form-actions">
-            <ActionButton type="submit" tone="mint">
-              {isEditing ? 'UPDATE_DOSSIER' : 'SAVE_DOSSIER'}
+            <ActionButton type="submit" tone="mint" disabled={isSubmitting}>
+              {isSubmitting ? 'WRITING_DOSSIER...' : isEditing ? 'UPDATE_DOSSIER' : 'SAVE_DOSSIER'}
             </ActionButton>
             <ActionButton to="/runners" tone="neutral" fill={false}>
               CANCEL

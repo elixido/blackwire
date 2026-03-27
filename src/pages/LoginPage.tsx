@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthLayout } from '../components/AuthLayout';
 import { ActionButton, SectionLabel } from '../components/ui';
@@ -15,6 +15,8 @@ export function LoginPage() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
 
   useEffect(() => {
     const state = location.state as LoginLocationState | null;
@@ -26,14 +28,25 @@ export function LoginPage() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const result = await login(identifier, password);
-    setStatus(result.message);
-    if (!result.ok && result.code === 'SECURITY_CODE_REQUIRED' && result.email) {
-      navigate('/verify', { state: { email: result.email } });
+    if (submittingRef.current) {
       return;
     }
-    if (result.ok) {
-      navigate('/jobs');
+
+    submittingRef.current = true;
+    setIsSubmitting(true);
+    try {
+      const result = await login(identifier, password);
+      setStatus(result.message);
+      if (!result.ok && result.code === 'SECURITY_CODE_REQUIRED' && result.email) {
+        navigate('/verify', { state: { email: result.email } });
+        return;
+      }
+      if (result.ok) {
+        navigate('/jobs');
+      }
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -84,8 +97,8 @@ export function LoginPage() {
         </p>
 
         <div className="form-actions">
-          <ActionButton type="submit" tone="mint">
-            JACK_IN
+          <ActionButton type="submit" tone="mint" disabled={isSubmitting}>
+            {isSubmitting ? 'AUTHENTICATING...' : 'JACK_IN'}
           </ActionButton>
           <Link className="text-link" to="/register">
             CREATE_ACCOUNT

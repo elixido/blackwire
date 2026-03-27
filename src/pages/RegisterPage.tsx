@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthLayout } from '../components/AuthLayout';
 import { ActionButton, SectionLabel } from '../components/ui';
@@ -18,29 +18,42 @@ export function RegisterPage() {
     accepted: false
   });
   const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submittingRef.current) {
+      return;
+    }
+
     if (!form.accepted) {
       setStatus('OPERATION_TERMS_REQUIRED');
       return;
     }
 
-    const result = await register({
-      email: form.email,
-      displayName: form.displayName,
-      password: form.password,
-      notes: form.notes,
-      handles: {
-        discord: form.discord,
-        instagram: form.instagram,
-        other: form.other
-      }
-    });
+    submittingRef.current = true;
+    setIsSubmitting(true);
+    try {
+      const result = await register({
+        email: form.email,
+        displayName: form.displayName,
+        password: form.password,
+        notes: form.notes,
+        handles: {
+          discord: form.discord,
+          instagram: form.instagram,
+          other: form.other
+        }
+      });
 
-    setStatus(result.message);
-    if (result.ok) {
-      navigate('/jobs');
+      setStatus(result.message);
+      if (result.ok) {
+        navigate('/jobs');
+      }
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -156,8 +169,8 @@ export function RegisterPage() {
         </p>
 
         <div className="form-actions">
-          <ActionButton type="submit" tone="mint">
-            EXECUTE_REGISTRATION
+          <ActionButton type="submit" tone="mint" disabled={isSubmitting}>
+            {isSubmitting ? 'WRITING_ACCOUNT...' : 'EXECUTE_REGISTRATION'}
           </ActionButton>
           <Link className="text-link" to="/login">
             RETURN_TO_LOGIN

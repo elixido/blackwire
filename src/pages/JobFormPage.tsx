@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ActionButton, Panel, SectionTitle, StatusTag } from '../components/ui';
 import { fromInputDateTime, parseTags, serializeTags, toInputDateTime } from '../lib/format';
@@ -15,6 +15,8 @@ export function JobFormPage() {
   const isEditing = Boolean(existing);
 
   const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const [form, setForm] = useState(() => ({
     title: existing?.title ?? '',
     description: existing?.description ?? '',
@@ -38,6 +40,10 @@ export function JobFormPage() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submittingRef.current) {
+      return;
+    }
+
     if (!form.title.trim() || !form.description.trim() || !form.scheduledAt || !form.site.trim()) {
       setStatus('MISSING_REQUIRED_FIELDS');
       return;
@@ -61,12 +67,18 @@ export function JobFormPage() {
       status: form.status
     };
 
+    submittingRef.current = true;
+    setIsSubmitting(true);
+
     let next = null;
     try {
       next = isEditing && existing ? await updateJob(existing.id, draft) : await createJob(draft);
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'MISSION_WRITE_FAILED');
       return;
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
     }
 
     if (!next) {
@@ -263,8 +275,8 @@ export function JobFormPage() {
 
           <p className="inline-status">{status || 'SAVE_LOCKS_THE_CURRENT_PAYLOAD'}</p>
 
-          <ActionButton type="submit" tone="mint">
-            {isEditing ? 'UPDATE_MISSION' : 'DEPLOY_MISSION'}
+          <ActionButton type="submit" tone="mint" disabled={isSubmitting}>
+            {isSubmitting ? 'WRITING_MISSION...' : isEditing ? 'UPDATE_MISSION' : 'DEPLOY_MISSION'}
           </ActionButton>
           <ActionButton to={existing ? `/jobs/${existing.id}` : '/jobs'} tone="neutral" fill={false}>
             CANCEL

@@ -649,6 +649,28 @@ router.post(
 
     const input = runnerDraftSchema.parse(req.body);
     const now = new Date().toISOString();
+    const normalizedStreetName = input.streetName.trim().toUpperCase();
+    const duplicateResult = await pool.query<{ id: string }>(
+      `
+        SELECT id
+        FROM runners
+        WHERE owner_id = $1
+          AND street_name = $2
+          AND created_at > NOW() - INTERVAL '15 seconds'
+        ORDER BY created_at DESC
+        LIMIT 1
+      `,
+      [session.user.id, normalizedStreetName]
+    );
+
+    const duplicateRunner = duplicateResult.rows[0];
+    if (duplicateRunner) {
+      return ok(res, 'DOSSIER_ALREADY_EXISTS', 'This runner dossier was just created.', {
+        state: await buildStateForUser(session.user.id),
+        runnerId: duplicateRunner.id
+      });
+    }
+
     const avatarPath = await processAvatarInput(input.avatar);
     const runnerId = `runner-${randomUUID().slice(0, 8)}`;
 
@@ -674,7 +696,7 @@ router.post(
       [
         runnerId,
         session.user.id,
-        input.streetName.trim().toUpperCase(),
+        normalizedStreetName,
         input.realName.trim(),
         input.age.trim(),
         input.metatype.trim(),
