@@ -628,6 +628,23 @@ img {
   color: var(--color-mint);
 }
 
+.field-hint {
+  display: inline-flex;
+  margin-left: 0.55rem;
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  vertical-align: middle;
+}
+
+.field-hint-required {
+  color: var(--color-amber);
+}
+
+.field-hint-optional {
+  color: rgba(173, 170, 173, 0.82);
+}
+
 .input-field,
 .textarea-field,
 .select-field,
@@ -689,6 +706,10 @@ img {
   width: 1.1rem;
   height: 1.1rem;
   accent-color: var(--color-mint-strong);
+}
+
+.checkbox-line .field-hint {
+  margin-left: 0.4rem;
 }
 
 .inline-status {

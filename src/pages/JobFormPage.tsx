@@ -124,19 +124,26 @@ export function JobFormPage() {
         <section className="mission-form-main">
           <Panel className="mission-title-panel" accent="mint">
             <label className="field">
-              <span>MISSION_TITLE_</span>
+              <span>
+                MISSION_TITLE_
+                <em className="field-hint field-hint-required">REQUIRED</em>
+              </span>
               <input
                 className="input-field input-large"
                 value={form.title}
                 onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
                 placeholder="E.G. DATA_EXTRACTION_CORP_X"
+                required
               />
             </label>
           </Panel>
 
           <Panel className="mission-description-panel" accent="pink">
             <label className="field">
-              <span>OBJECTIVE_PARAMETERS_</span>
+              <span>
+                OBJECTIVE_PARAMETERS_
+                <em className="field-hint field-hint-required">REQUIRED</em>
+              </span>
               <textarea
                 className="textarea-field textarea-large"
                 value={form.description}
@@ -145,6 +152,7 @@ export function JobFormPage() {
                 }
                 placeholder="Describe the target, route, session plan and expected obstacles..."
                 rows={10}
+                required
               />
             </label>
           </Panel>
@@ -152,17 +160,24 @@ export function JobFormPage() {
           <div className="split-panels">
             <Panel className="detail-panel" accent="amber">
               <label className="field">
-                <span>LOCATION_</span>
+                <span>
+                  LOCATION_
+                  <em className="field-hint field-hint-required">REQUIRED</em>
+                </span>
                 <input
                   className="input-field"
                   value={form.site}
                   onChange={(event) => setForm((current) => ({ ...current, site: event.target.value }))}
                   placeholder="Seattle Pyramid"
+                  required
                 />
               </label>
 
               <label className="field">
-                <span>REQUIREMENTS_</span>
+                <span>
+                  REQUIREMENTS_
+                  <em className="field-hint field-hint-optional">OPTIONAL</em>
+                </span>
                 <input
                   className="input-field"
                   value={form.requirements}
@@ -174,7 +189,10 @@ export function JobFormPage() {
               </label>
 
               <label className="field">
-                <span>NOTES_</span>
+                <span>
+                  NOTES_
+                  <em className="field-hint field-hint-optional">OPTIONAL</em>
+                </span>
                 <textarea
                   className="textarea-field"
                   value={form.notes}
@@ -187,7 +205,10 @@ export function JobFormPage() {
 
             <Panel className="detail-panel">
               <div className="field">
-                <span>MISSION_STATUS_</span>
+                <span>
+                  MISSION_STATUS_
+                  <em className="field-hint field-hint-required">REQUIRED</em>
+                </span>
                 <div className="choice-row">
                   {(['open', 'closed'] as const).map((entry) => (
                     <button
@@ -203,7 +224,10 @@ export function JobFormPage() {
               </div>
 
               <div className="field">
-                <span>THREAT_LEVEL_</span>
+                <span>
+                  THREAT_LEVEL_
+                  <em className="field-hint field-hint-required">REQUIRED</em>
+                </span>
                 <div className="choice-row">
                   {threatOptions.map((entry) => (
                     <button
@@ -220,17 +244,24 @@ export function JobFormPage() {
 
               <div className="split-fields">
                 <label className="field">
-                  <span>PAYOUT_</span>
+                  <span>
+                    PAYOUT_
+                    <em className="field-hint field-hint-required">REQUIRED</em>
+                  </span>
                   <input
                     className="input-field"
                     type="number"
                     min="0"
                     value={form.payout}
                     onChange={(event) => setForm((current) => ({ ...current, payout: event.target.value }))}
+                    required
                   />
                 </label>
                 <label className="field">
-                  <span>SLOTS_</span>
+                  <span>
+                    SLOTS_
+                    <em className="field-hint field-hint-required">REQUIRED</em>
+                  </span>
                   <input
                     className="input-field"
                     type="number"
@@ -240,12 +271,16 @@ export function JobFormPage() {
                     onChange={(event) =>
                       setForm((current) => ({ ...current, playerSlots: event.target.value }))
                     }
+                    required
                   />
                 </label>
               </div>
 
               <label className="field">
-                <span>DATE_AND_TIME_</span>
+                <span>
+                  DATE_AND_TIME_
+                  <em className="field-hint field-hint-required">REQUIRED</em>
+                </span>
                 <input
                   className="input-field"
                   type="datetime-local"
@@ -253,6 +288,7 @@ export function JobFormPage() {
                   onChange={(event) =>
                     setForm((current) => ({ ...current, scheduledAt: event.target.value }))
                   }
+                  required
                 />
               </label>
 

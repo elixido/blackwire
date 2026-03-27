@@ -168,18 +168,25 @@ export function RunnerFormPage() {
 
         <section className="runner-form-main">
           <label className="field">
-            <span>[01] RUNNER_ALIAS_</span>
+            <span>
+              [01] RUNNER_ALIAS_
+              <em className="field-hint field-hint-required">REQUIRED</em>
+            </span>
             <input
               className="input-field"
               value={form.streetName}
               onChange={(event) => setForm((current) => ({ ...current, streetName: event.target.value }))}
               placeholder="E.G. NEO_GHOST"
+              required
             />
           </label>
 
           <div className="split-fields">
             <label className="field">
-              <span>REAL_NAME_</span>
+              <span>
+                REAL_NAME_
+                <em className="field-hint field-hint-optional">OPTIONAL</em>
+              </span>
               <input
                 className="input-field"
                 value={form.realName}
@@ -188,7 +195,10 @@ export function RunnerFormPage() {
               />
             </label>
             <label className="field">
-              <span>AGE_</span>
+              <span>
+                AGE_
+                <em className="field-hint field-hint-optional">OPTIONAL</em>
+              </span>
               <input
                 className="input-field"
                 value={form.age}
@@ -197,18 +207,25 @@ export function RunnerFormPage() {
               />
             </label>
             <label className="field">
-              <span>METATYPE_</span>
+              <span>
+                METATYPE_
+                <em className="field-hint field-hint-required">REQUIRED</em>
+              </span>
               <input
                 className="input-field"
                 value={form.metatype}
                 onChange={(event) => setForm((current) => ({ ...current, metatype: event.target.value }))}
                 placeholder="Elf"
+                required
               />
             </label>
           </div>
 
           <div className="field">
-            <span>[02] OPERATIONAL_SPECIALTY_</span>
+            <span>
+              [02] OPERATIONAL_SPECIALTY_
+              <em className="field-hint field-hint-required">REQUIRED</em>
+            </span>
             <div className="archetype-grid">
               {archetypes.map((entry) => (
                 <button
@@ -224,7 +241,10 @@ export function RunnerFormPage() {
           </div>
 
           <label className="field">
-            <span>SPECIALTIES_</span>
+            <span>
+              SPECIALTIES_
+              <em className="field-hint field-hint-optional">OPTIONAL</em>
+            </span>
             <input
               className="input-field"
               value={form.specialties}
@@ -234,7 +254,10 @@ export function RunnerFormPage() {
           </label>
 
           <div className="field">
-            <span>RISK_ASSESSMENT_</span>
+            <span>
+              RISK_ASSESSMENT_
+              <em className="field-hint field-hint-required">REQUIRED</em>
+            </span>
             <div className="choice-row">
               {riskLevels.map((entry) => (
                 <button
@@ -250,18 +273,25 @@ export function RunnerFormPage() {
           </div>
 
           <label className="field">
-            <span>SUMMARY_</span>
+            <span>
+              SUMMARY_
+              <em className="field-hint field-hint-required">REQUIRED</em>
+            </span>
             <textarea
               className="textarea-field"
               value={form.summary}
               onChange={(event) => setForm((current) => ({ ...current, summary: event.target.value }))}
               rows={5}
               placeholder="Short profile so Johnsons know what the runner brings to the table..."
+              required
             />
           </label>
 
           <label className="field">
-            <span>AVATAR_UPLOAD_</span>
+            <span>
+              AVATAR_UPLOAD_
+              <em className="field-hint field-hint-optional">OPTIONAL</em>
+            </span>
             <input className="file-field" type="file" accept="image/*" onChange={handleAvatarUpload} />
           </label>
 

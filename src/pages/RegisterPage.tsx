@@ -77,19 +77,26 @@ export function RegisterPage() {
       <form className="form-stack" onSubmit={handleSubmit}>
         <SectionLabel>[01] RUNNER_ALIAS_</SectionLabel>
         <label className="field">
-          <span>DISPLAY_NAME_</span>
+          <span>
+            DISPLAY_NAME_
+            <em className="field-hint field-hint-required">REQUIRED</em>
+          </span>
           <input
             className="input-field"
             value={form.displayName}
             onChange={(event) => setForm((current) => ({ ...current, displayName: event.target.value }))}
             placeholder="E.G. NEO_GHOST"
             autoComplete="nickname"
+            required
           />
         </label>
 
         <div className="split-fields">
           <label className="field">
-            <span>MAIL_ADDRESS_</span>
+            <span>
+              MAIL_ADDRESS_
+              <em className="field-hint field-hint-required">REQUIRED</em>
+            </span>
             <input
               className="input-field"
               type="email"
@@ -97,10 +104,14 @@ export function RegisterPage() {
               onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
               placeholder="you@blackwire.net"
               autoComplete="email"
+              required
             />
           </label>
           <label className="field">
-            <span>ENCRYPTION_KEY_</span>
+            <span>
+              ENCRYPTION_KEY_
+              <em className="field-hint field-hint-required">REQUIRED</em>
+            </span>
             <input
               className="input-field"
               type="password"
@@ -108,6 +119,7 @@ export function RegisterPage() {
               onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
               placeholder="PASSWORD"
               autoComplete="new-password"
+              required
             />
           </label>
         </div>
@@ -115,7 +127,10 @@ export function RegisterPage() {
         <SectionLabel>[02] SOCIAL_HANDLES_</SectionLabel>
         <div className="split-fields">
           <label className="field">
-            <span>DISCORD_</span>
+            <span>
+              DISCORD_
+              <em className="field-hint field-hint-optional">OPTIONAL</em>
+            </span>
             <input
               className="input-field"
               value={form.discord}
@@ -124,7 +139,10 @@ export function RegisterPage() {
             />
           </label>
           <label className="field">
-            <span>INSTAGRAM_</span>
+            <span>
+              INSTAGRAM_
+              <em className="field-hint field-hint-optional">OPTIONAL</em>
+            </span>
             <input
               className="input-field"
               value={form.instagram}
@@ -133,7 +151,10 @@ export function RegisterPage() {
             />
           </label>
           <label className="field">
-            <span>OTHER_</span>
+            <span>
+              OTHER_
+              <em className="field-hint field-hint-optional">OPTIONAL</em>
+            </span>
             <input
               className="input-field"
               value={form.other}
@@ -145,7 +166,10 @@ export function RegisterPage() {
 
         <SectionLabel>[03] TABLE_NOTES_</SectionLabel>
         <label className="field">
-          <span>VISIBLE_NOTES_</span>
+          <span>
+            VISIBLE_NOTES_
+            <em className="field-hint field-hint-optional">OPTIONAL</em>
+          </span>
           <textarea
             className="textarea-field"
             value={form.notes}
@@ -160,8 +184,12 @@ export function RegisterPage() {
             type="checkbox"
             checked={form.accepted}
             onChange={(event) => setForm((current) => ({ ...current, accepted: event.target.checked }))}
+            required
           />
-          <span>I_ACCEPT_TERMS_OF_OPERATION</span>
+          <span>
+            I_ACCEPT_TERMS_OF_OPERATION
+            <em className="field-hint field-hint-required">REQUIRED</em>
+          </span>
         </label>
 
         <p className="inline-status">
