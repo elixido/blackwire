@@ -61,7 +61,14 @@ export function JobFormPage() {
       status: form.status
     };
 
-    const next = isEditing && existing ? await updateJob(existing.id, draft) : await createJob(draft);
+    let next = null;
+    try {
+      next = isEditing && existing ? await updateJob(existing.id, draft) : await createJob(draft);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'MISSION_WRITE_FAILED');
+      return;
+    }
+
     if (!next) {
       setStatus('MISSION_WRITE_FAILED');
       return;

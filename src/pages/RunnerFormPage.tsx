@@ -68,8 +68,14 @@ export function RunnerFormPage() {
       avatar: form.avatar
     };
 
-    const next =
-      isEditing && existing ? await updateRunner(existing.id, draft) : await createRunner(draft);
+    let next = null;
+    try {
+      next = isEditing && existing ? await updateRunner(existing.id, draft) : await createRunner(draft);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'DOSSIER_WRITE_FAILED');
+      return;
+    }
+
     if (!next) {
       setStatus('DOSSIER_WRITE_FAILED');
       return;

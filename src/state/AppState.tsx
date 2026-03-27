@@ -323,7 +323,7 @@ export function AppStateProvider({ children }: PropsWithChildren) {
     });
 
     if (!result.ok) {
-      return null;
+      throw new Error(result.message);
     }
 
     const nextState = normalizeState(result.state ?? EMPTY_STATE);
@@ -338,7 +338,7 @@ export function AppStateProvider({ children }: PropsWithChildren) {
     });
 
     if (!result.ok) {
-      return null;
+      throw new Error(result.message);
     }
 
     const nextState = normalizeState(result.state ?? EMPTY_STATE);
@@ -369,7 +369,7 @@ export function AppStateProvider({ children }: PropsWithChildren) {
     });
 
     if (!result.ok) {
-      return null;
+      throw new Error(result.message);
     }
 
     const nextState = normalizeState(result.state ?? EMPTY_STATE);
@@ -384,7 +384,7 @@ export function AppStateProvider({ children }: PropsWithChildren) {
     });
 
     if (!result.ok) {
-      return null;
+      throw new Error(result.message);
     }
 
     const nextState = normalizeState(result.state ?? EMPTY_STATE);

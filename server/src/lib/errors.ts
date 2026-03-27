@@ -1,4 +1,5 @@
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
+import { ZodError } from 'zod';
 
 export class AppError extends Error {
   status: number;
@@ -46,6 +47,15 @@ export function errorHandler(
       ok: false,
       code: error.code,
       message: error.message
+    });
+  }
+
+  if (error instanceof ZodError) {
+    const firstIssue = error.issues[0];
+    return res.status(400).json({
+      ok: false,
+      code: 'VALIDATION_ERROR',
+      message: firstIssue?.message ?? 'One or more fields are invalid.'
     });
   }
 
