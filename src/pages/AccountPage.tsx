@@ -5,6 +5,8 @@ import { useAppState } from '../state/AppState';
 export function AccountPage() {
   const { currentUser, state, updateProfile } = useAppState();
   const [status, setStatus] = useState('');
+  const [statusTone, setStatusTone] = useState<'idle' | 'success' | 'error'>('idle');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     discord: currentUser?.handles.discord ?? '',
     instagram: currentUser?.handles.instagram ?? '',
@@ -38,6 +40,7 @@ export function AccountPage() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsSubmitting(true);
     const result = await updateProfile({
       handles: {
         discord: form.discord,
@@ -46,7 +49,9 @@ export function AccountPage() {
       },
       notes: form.notes
     });
+    setStatusTone(result.ok ? 'success' : 'error');
     setStatus(result.message);
+    setIsSubmitting(false);
   };
 
   return (
@@ -141,11 +146,13 @@ export function AccountPage() {
                 />
               </label>
 
-              <p className="inline-status">{status || 'DISPLAY_NAME_CANNOT_BE_CHANGED'}</p>
+              <p className={`inline-status ${statusTone !== 'idle' ? `inline-status-${statusTone}` : ''}`}>
+                {status || 'DISPLAY_NAME_CANNOT_BE_CHANGED'}
+              </p>
 
               <div className="form-actions">
-                <ActionButton type="submit" tone="mint">
-                  UPDATE_CREDENTIALS
+                <ActionButton type="submit" tone="mint" disabled={isSubmitting}>
+                  {isSubmitting ? 'SAVING_CHANGES...' : 'UPDATE_CREDENTIALS'}
                 </ActionButton>
                 <ActionButton to={`/profiles/${currentUser.id}`} tone="neutral" fill={false}>
                   PUBLIC_PROFILE

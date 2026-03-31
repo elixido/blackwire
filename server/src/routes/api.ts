@@ -32,6 +32,7 @@ import {
   sendSecurityCodeMail,
   sendWelcomeMail
 } from '../services/mailer';
+import { JOB_DESCRIPTION_MAX_LENGTH } from '../../../src/lib/limits';
 import type {
   ActionResult,
   ApplicationStatus,
@@ -112,7 +113,7 @@ const runnerDraftSchema = z.object({
 
 const jobDraftSchema = z.object({
   title: z.string().min(1).max(120),
-  description: z.string().min(1).max(5000),
+  description: z.string().min(1).max(JOB_DESCRIPTION_MAX_LENGTH),
   payout: z.number().int().min(0).max(1_000_000_000),
   threatLevel: z.enum(['Low', 'Moderate', 'High', 'Lethal']),
   scheduledAt: z.string().refine((value) => !Number.isNaN(Date.parse(value)), 'Invalid date.'),
@@ -148,6 +149,15 @@ const reportSchema = z.object({
   reason: z.string().min(1).max(120),
   details: z.string().max(1000).default('')
 });
+
+function isPastMissionDate(value: string) {
+  const target = Date.parse(value);
+  if (Number.isNaN(target)) {
+    return false;
+  }
+
+  return target < Date.now() - 60_000;
+}
 
 async function getSessionUser(req: Request) {
   const token = readCookie(req, config.sessionCookieName);
@@ -806,6 +816,10 @@ router.post(
     }
 
     const input = jobDraftSchema.parse(req.body);
+    if (isPastMissionDate(input.scheduledAt)) {
+      fail(400, 'MISSION_DATE_IN_PAST', 'Runs must be scheduled in the future.');
+    }
+
     const now = new Date().toISOString();
     const jobId = `job-${randomUUID().slice(0, 8)}`;
 
@@ -873,6 +887,9 @@ router.put(
     }
 
     const input = jobDraftSchema.parse(req.body);
+    if (input.status === 'open' && isPastMissionDate(input.scheduledAt)) {
+      fail(400, 'MISSION_DATE_IN_PAST', 'Open runs must be scheduled in the future.');
+    }
 
     await pool.query(
       `

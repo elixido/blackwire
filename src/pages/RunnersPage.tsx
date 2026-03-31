@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ActionButton,
   AvatarFrame,
@@ -13,7 +14,10 @@ import { riskScore } from '../lib/format';
 import { useAppState } from '../state/AppState';
 
 export function RunnersPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { state, currentUser } = useAppState();
+  const [status, setStatus] = useState('');
 
   const ownRunners = state.runners.filter((runner) => runner.ownerId === currentUser?.id);
   const activeApplications = state.jobs.reduce((sum, job) => {
@@ -22,6 +26,14 @@ export function RunnersPage() {
       job.applications.filter((application) => application.applicantId === currentUser?.id).length
     );
   }, 0);
+
+  useEffect(() => {
+    const nextState = location.state as { notice?: string } | null;
+    if (nextState?.notice) {
+      setStatus(nextState.notice);
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.pathname, location.state, navigate]);
 
   return (
     <div className="page-stack">
@@ -53,18 +65,22 @@ export function RunnersPage() {
         }
       />
 
-      <div className="jobs-feed-actions">
-        <ActionButton to="/runners/new" tone="mint">
-          ADD_RUNNER
-        </ActionButton>
-      </div>
+      {status ? <p className="inline-status inline-status-success">{status}</p> : null}
+
+      {ownRunners.length > 0 ? (
+        <div className="jobs-feed-actions">
+          <ActionButton to="/runners/new" tone="mint">
+            ADD_RUNNER
+          </ActionButton>
+        </div>
+      ) : null}
 
       {ownRunners.length === 0 ? (
         <EmptyPanel
           icon="person_add"
           title="NO_RUNNERS_ON_FILE"
           copy="Create your first dossier so you can apply to open jobs."
-          action={<ActionButton to="/runners/new">CREATE_DOSSIER</ActionButton>}
+          action={<ActionButton to="/runners/new">CREATE_RUNNER</ActionButton>}
         />
       ) : null}
 
@@ -113,14 +129,16 @@ export function RunnersPage() {
           );
         })}
 
-        <Panel className="runner-card runner-card-empty">
-          <div className="runner-empty-icon">+</div>
-          <h3>RECRUIT_NEW_TALENT</h3>
-          <p>Deploy another character profile.</p>
-          <ActionButton to="/runners/new" tone="pink">
-            ADD_RUNNER
-          </ActionButton>
-        </Panel>
+        {ownRunners.length > 0 ? (
+          <Panel className="runner-card runner-card-empty">
+            <div className="runner-empty-icon">+</div>
+            <h3>RECRUIT_NEW_TALENT</h3>
+            <p>Deploy another character profile.</p>
+            <ActionButton to="/runners/new" tone="pink">
+              ADD_RUNNER
+            </ActionButton>
+          </Panel>
+        ) : null}
       </div>
 
       <Panel className="terminal-log-panel">

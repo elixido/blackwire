@@ -4,6 +4,20 @@ export function formatNuyen(value: number): string {
   return new Intl.NumberFormat('de-DE').format(value);
 }
 
+export function formatNuyenInput(value: string): string {
+  const digits = value.replace(/\D/g, '');
+  if (!digits) {
+    return '';
+  }
+
+  return formatNuyen(Number(digits));
+}
+
+export function parseNuyenInput(value: string): number {
+  const digits = value.replace(/\D/g, '');
+  return digits ? Number(digits) : 0;
+}
+
 export function formatDateTime(date: string): string {
   return new Intl.DateTimeFormat('de-DE', {
     day: '2-digit',
@@ -22,6 +36,25 @@ export function toInputDateTime(value: string): string {
 
 export function fromInputDateTime(value: string): string {
   return new Date(value).toISOString();
+}
+
+export function currentInputDateTime(): string {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  return toInputDateTime(now.toISOString());
+}
+
+export function isInputDateTimeInPast(value: string): boolean {
+  if (!value) {
+    return false;
+  }
+
+  const target = new Date(value).getTime();
+  if (Number.isNaN(target)) {
+    return false;
+  }
+
+  return target < Date.now() - 60_000;
 }
 
 export function threatTone(level: ThreatLevel): 'mint' | 'pink' | 'amber' | 'red' {

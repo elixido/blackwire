@@ -25,6 +25,7 @@ export function RunnerFormPage() {
   const isEditing = Boolean(existing);
 
   const [status, setStatus] = useState('');
+  const [statusTone, setStatusTone] = useState<'idle' | 'success' | 'error'>('idle');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submittingRef = useRef(false);
   const [form, setForm] = useState(() => ({
@@ -54,6 +55,7 @@ export function RunnerFormPage() {
     }
 
     if (!form.streetName.trim() || !form.metatype.trim() || !form.summary.trim()) {
+      setStatusTone('error');
       setStatus('MISSING_REQUIRED_FIELDS');
       return;
     }
@@ -81,6 +83,7 @@ export function RunnerFormPage() {
     try {
       next = isEditing && existing ? await updateRunner(existing.id, draft) : await createRunner(draft);
     } catch (error) {
+      setStatusTone('error');
       setStatus(error instanceof Error ? error.message : 'DOSSIER_WRITE_FAILED');
       return;
     } finally {
@@ -89,11 +92,14 @@ export function RunnerFormPage() {
     }
 
     if (!next) {
+      setStatusTone('error');
       setStatus('DOSSIER_WRITE_FAILED');
       return;
     }
 
-    navigate('/runners');
+    navigate('/runners', {
+      state: { notice: isEditing ? 'DOSSIER_UPDATED' : 'DOSSIER_SAVED' }
+    });
   };
 
   const handleDelete = async () => {
@@ -103,8 +109,9 @@ export function RunnerFormPage() {
 
     const result = await deleteRunner(existing.id);
     if (result.ok) {
-      navigate('/runners');
+      navigate('/runners', { state: { notice: 'RUNNER_PURGED' } });
     } else {
+      setStatusTone('error');
       setStatus(result.message);
     }
   };
@@ -301,7 +308,9 @@ export function RunnerFormPage() {
             <StatusTag tone="pink">SERVER_UPLOAD</StatusTag>
           </div>
 
-          <p className="inline-status">{status || 'SAVE_CONFIRMS_THIS_DOSSIER'}</p>
+          <p className={`inline-status ${statusTone !== 'idle' ? `inline-status-${statusTone}` : ''}`}>
+            {status || 'SAVE_CONFIRMS_THIS_DOSSIER'}
+          </p>
 
           <div className="form-actions">
             <ActionButton type="submit" tone="mint" disabled={isSubmitting}>

@@ -18,6 +18,7 @@ export function RegisterPage() {
     accepted: false
   });
   const [status, setStatus] = useState('');
+  const [statusTone, setStatusTone] = useState<'idle' | 'success' | 'error'>('idle');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submittingRef = useRef(false);
 
@@ -28,7 +29,14 @@ export function RegisterPage() {
     }
 
     if (!form.accepted) {
+      setStatusTone('error');
       setStatus('OPERATION_TERMS_REQUIRED');
+      return;
+    }
+
+    if (form.password.trim().length < 6) {
+      setStatusTone('error');
+      setStatus('PASSWORD_MIN_6_CHARS');
       return;
     }
 
@@ -47,6 +55,7 @@ export function RegisterPage() {
         }
       });
 
+      setStatusTone(result.ok ? 'success' : 'error');
       setStatus(result.message);
       if (result.ok) {
         navigate('/jobs');
@@ -113,15 +122,17 @@ export function RegisterPage() {
               <em className="field-hint field-hint-required">REQUIRED</em>
             </span>
             <input
-              className="input-field"
-              type="password"
-              value={form.password}
-              onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-              placeholder="PASSWORD"
-              autoComplete="new-password"
-              required
-            />
-          </label>
+            className="input-field"
+            type="password"
+            value={form.password}
+            onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
+            placeholder="PASSWORD"
+            autoComplete="new-password"
+            minLength={6}
+            required
+          />
+          <p className="field-note">MINIMUM_6_CHARACTERS</p>
+        </label>
         </div>
 
         <SectionLabel>[02] SOCIAL_HANDLES_</SectionLabel>
@@ -192,7 +203,7 @@ export function RegisterPage() {
           </span>
         </label>
 
-        <p className="inline-status">
+        <p className={`inline-status ${statusTone !== 'idle' ? `inline-status-${statusTone}` : ''}`}>
           {status || (BETA_MODE ? 'ALPHA_FNF_ACCESS: ACCOUNT_UNLOCKS_IMMEDIATELY' : 'DISPLAY_NAMES_ARE_UNIQUE_AND_LOCKED')}
         </p>
 

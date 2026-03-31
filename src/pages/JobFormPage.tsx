@@ -1,7 +1,17 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ActionButton, Panel, SectionTitle, StatusTag } from '../components/ui';
-import { fromInputDateTime, parseTags, serializeTags, toInputDateTime } from '../lib/format';
+import {
+  currentInputDateTime,
+  formatNuyenInput,
+  fromInputDateTime,
+  isInputDateTimeInPast,
+  parseNuyenInput,
+  parseTags,
+  serializeTags,
+  toInputDateTime
+} from '../lib/format';
+import { JOB_DESCRIPTION_MAX_LENGTH } from '../lib/limits';
 import { useAppState } from '../state/AppState';
 import type { ThreatLevel } from '../types';
 
@@ -15,12 +25,13 @@ export function JobFormPage() {
   const isEditing = Boolean(existing);
 
   const [status, setStatus] = useState('');
+  const [statusTone, setStatusTone] = useState<'idle' | 'success' | 'error'>('idle');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submittingRef = useRef(false);
   const [form, setForm] = useState(() => ({
     title: existing?.title ?? '',
     description: existing?.description ?? '',
-    payout: existing ? String(existing.payout) : '15000',
+    payout: existing ? formatNuyenInput(String(existing.payout)) : formatNuyenInput('15000'),
     threatLevel: existing?.threatLevel ?? ('Moderate' as ThreatLevel),
     scheduledAt: existing ? toInputDateTime(existing.scheduledAt) : '',
     site: existing?.site ?? '',
@@ -45,7 +56,20 @@ export function JobFormPage() {
     }
 
     if (!form.title.trim() || !form.description.trim() || !form.scheduledAt || !form.site.trim()) {
+      setStatusTone('error');
       setStatus('MISSING_REQUIRED_FIELDS');
+      return;
+    }
+
+    if (form.description.trim().length > JOB_DESCRIPTION_MAX_LENGTH) {
+      setStatusTone('error');
+      setStatus(`DESCRIPTION_MAX_${JOB_DESCRIPTION_MAX_LENGTH}`);
+      return;
+    }
+
+    if (isInputDateTimeInPast(form.scheduledAt)) {
+      setStatusTone('error');
+      setStatus('MISSION_DATE_IN_PAST');
       return;
     }
 
@@ -56,7 +80,7 @@ export function JobFormPage() {
     const draft = {
       title: form.title.trim().toUpperCase(),
       description: form.description.trim(),
-      payout: Number(form.payout) || 0,
+      payout: parseNuyenInput(form.payout),
       threatLevel: form.threatLevel,
       scheduledAt: fromInputDateTime(form.scheduledAt),
       scheduledTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -74,6 +98,7 @@ export function JobFormPage() {
     try {
       next = isEditing && existing ? await updateJob(existing.id, draft) : await createJob(draft);
     } catch (error) {
+      setStatusTone('error');
       setStatus(error instanceof Error ? error.message : 'MISSION_WRITE_FAILED');
       return;
     } finally {
@@ -82,11 +107,14 @@ export function JobFormPage() {
     }
 
     if (!next) {
+      setStatusTone('error');
       setStatus('MISSION_WRITE_FAILED');
       return;
     }
 
-    navigate(`/jobs/${next.id}`);
+    navigate(`/jobs/${next.id}`, {
+      state: { notice: isEditing ? 'MISSION_UPDATED' : 'MISSION_DEPLOYED' }
+    });
   };
 
   const handleDelete = async () => {
@@ -98,6 +126,7 @@ export function JobFormPage() {
     if (result.ok) {
       navigate('/jobs');
     } else {
+      setStatusTone('error');
       setStatus(result.message);
     }
   };
@@ -152,8 +181,12 @@ export function JobFormPage() {
                 }
                 placeholder="Describe the target, route, session plan and expected obstacles..."
                 rows={10}
+                maxLength={JOB_DESCRIPTION_MAX_LENGTH}
                 required
               />
+              <p className="field-note">
+                {form.description.trim().length}/{JOB_DESCRIPTION_MAX_LENGTH}_CHARACTERS
+              </p>
             </label>
           </Panel>
 
@@ -250,12 +283,18 @@ export function JobFormPage() {
                   </span>
                   <input
                     className="input-field"
-                    type="number"
-                    min="0"
+                    inputMode="numeric"
                     value={form.payout}
-                    onChange={(event) => setForm((current) => ({ ...current, payout: event.target.value }))}
+                    onChange={(event) =>
+                      setForm((current) => ({
+                        ...current,
+                        payout: formatNuyenInput(event.target.value)
+                      }))
+                    }
+                    placeholder="15.000"
                     required
                   />
+                  <p className="field-note">DIGITS_AUTO_FORMAT_AS_NUYEN</p>
                 </label>
                 <label className="field">
                   <span>
@@ -288,8 +327,10 @@ export function JobFormPage() {
                   onChange={(event) =>
                     setForm((current) => ({ ...current, scheduledAt: event.target.value }))
                   }
+                  min={currentInputDateTime()}
                   required
                 />
+                <p className="field-note">FUTURE_DATE_ONLY</p>
               </label>
 
               <div className="tag-row">
@@ -309,7 +350,9 @@ export function JobFormPage() {
             <p>{`> AWAITING_FINAL_COMMAND_`}</p>
           </Panel>
 
-          <p className="inline-status">{status || 'SAVE_LOCKS_THE_CURRENT_PAYLOAD'}</p>
+          <p className={`inline-status ${statusTone !== 'idle' ? `inline-status-${statusTone}` : ''}`}>
+            {status || 'SAVE_LOCKS_THE_CURRENT_PAYLOAD'}
+          </p>
 
           <ActionButton type="submit" tone="mint" disabled={isSubmitting}>
             {isSubmitting ? 'WRITING_MISSION...' : isEditing ? 'UPDATE_MISSION' : 'DEPLOY_MISSION'}

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   ActionButton,
   AvatarFrame,
@@ -21,8 +21,10 @@ import { useAppState } from '../state/AppState';
 
 export function JobDetailPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { jobId } = useParams();
   const [status, setStatus] = useState('');
+  const [statusTone, setStatusTone] = useState<'idle' | 'success' | 'error'>('idle');
   const {
     currentUser,
     state,
@@ -51,6 +53,15 @@ export function JobDetailPage() {
   const accepted = acceptedSlots(job);
   const myRunners = state.runners.filter((runner) => runner.ownerId === currentUser?.id);
 
+  useEffect(() => {
+    const nextState = location.state as { notice?: string } | null;
+    if (nextState?.notice) {
+      setStatus(nextState.notice);
+      setStatusTone('success');
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.pathname, location.state, navigate]);
+
   const handleDelete = async () => {
     if (!window.confirm('Delete this mission?')) {
       return;
@@ -62,6 +73,7 @@ export function JobDetailPage() {
       return;
     }
 
+    setStatusTone('error');
     setStatus(result.message);
   };
 
@@ -114,7 +126,11 @@ export function JobDetailPage() {
                 <p className="detail-copy">{job.description}</p>
                 <h2>JOHNSON_NOTES</h2>
                 <p className="detail-copy">{job.notes || 'NO_EXTRA_NOTES'}</p>
-                {status ? <p className="inline-status">{status}</p> : null}
+                {status ? (
+                  <p className={`inline-status ${statusTone !== 'idle' ? `inline-status-${statusTone}` : ''}`}>
+                    {status}
+                  </p>
+                ) : null}
               </div>
 
               <div>
@@ -185,6 +201,7 @@ export function JobDetailPage() {
                             fill={application.status === 'accepted'}
                             onClick={async () => {
                               const result = await reviewApplication(job.id, application.id, 'accepted');
+                              setStatusTone(result.ok ? 'success' : 'error');
                               setStatus(result.message);
                             }}
                             disabled={application.status === 'accepted' || openSlots(job) === 0}
@@ -196,6 +213,7 @@ export function JobDetailPage() {
                             fill={application.status === 'rejected'}
                             onClick={async () => {
                               const result = await reviewApplication(job.id, application.id, 'rejected');
+                              setStatusTone(result.ok ? 'success' : 'error');
                               setStatus(result.message);
                             }}
                             disabled={application.status === 'rejected'}
@@ -251,6 +269,7 @@ export function JobDetailPage() {
                             tone="mint"
                             onClick={async () => {
                               const result = await applyToJob(job.id, runner.id);
+                              setStatusTone(result.ok ? 'success' : 'error');
                               setStatus(result.message);
                             }}
                             disabled={disabled}
