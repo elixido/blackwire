@@ -4,8 +4,9 @@ export type ApplicationStatus = 'pending' | 'accepted' | 'rejected';
 
 export interface SocialHandles {
   discord: string;
-  instagram: string;
-  other: string;
+  contactEmail: string;
+  preferredContact: string;
+  availability: string;
 }
 
 export interface User {

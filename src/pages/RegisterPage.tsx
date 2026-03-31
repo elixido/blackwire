@@ -12,8 +12,9 @@ export function RegisterPage() {
     displayName: '',
     password: '',
     discord: '',
-    instagram: '',
-    other: '',
+    contactEmail: '',
+    preferredContact: '',
+    availability: '',
     notes: '',
     accepted: false
   });
@@ -50,8 +51,9 @@ export function RegisterPage() {
         notes: form.notes,
         handles: {
           discord: form.discord,
-          instagram: form.instagram,
-          other: form.other
+          contactEmail: form.contactEmail,
+          preferredContact: form.preferredContact,
+          availability: form.availability
         }
       });
 
@@ -76,7 +78,7 @@ export function RegisterPage() {
           <span className="title-accent-pink">BLACKWIRE_ID</span>
         </>
       }
-      subtitle="Unique aliases are locked permanently. Discord and one extra social handle stay visible on the public dossier."
+      subtitle="Unique aliases are locked permanently. Public contact fields are optional and can be changed later in the account dossier."
       warning={
         BETA_MODE
           ? 'Alpha FNF mode active. Registration unlocks the account immediately. Mail confirmation comes later for the public launch.'
@@ -122,20 +124,20 @@ export function RegisterPage() {
               <em className="field-hint field-hint-required">REQUIRED</em>
             </span>
             <input
-            className="input-field"
-            type="password"
-            value={form.password}
-            onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-            placeholder="PASSWORD"
-            autoComplete="new-password"
-            minLength={6}
-            required
-          />
-          <p className="field-note">MINIMUM_6_CHARACTERS</p>
-        </label>
+              className="input-field"
+              type="password"
+              value={form.password}
+              onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
+              placeholder="PASSWORD"
+              autoComplete="new-password"
+              minLength={6}
+              required
+            />
+            <p className="field-note">MINIMUM_6_CHARACTERS</p>
+          </label>
         </div>
 
-        <SectionLabel>[02] SOCIAL_HANDLES_</SectionLabel>
+        <SectionLabel>[02] CONTACT_CHANNELS_</SectionLabel>
         <div className="split-fields">
           <label className="field">
             <span>
@@ -151,26 +153,46 @@ export function RegisterPage() {
           </label>
           <label className="field">
             <span>
-              INSTAGRAM_
+              CONTACT_EMAIL_
               <em className="field-hint field-hint-optional">OPTIONAL</em>
             </span>
             <input
               className="input-field"
-              value={form.instagram}
-              onChange={(event) => setForm((current) => ({ ...current, instagram: event.target.value }))}
-              placeholder="@yourhandle"
+              type="email"
+              value={form.contactEmail}
+              onChange={(event) =>
+                setForm((current) => ({ ...current, contactEmail: event.target.value }))
+              }
+              placeholder="public-contact@example.com"
+            />
+            <p className="field-note">VISIBLE_ON_PUBLIC_PROFILE_IF_FILLED</p>
+          </label>
+          <label className="field">
+            <span>
+              PREFERRED_CONTACT_
+              <em className="field-hint field-hint-optional">OPTIONAL</em>
+            </span>
+            <input
+              className="input-field"
+              value={form.preferredContact}
+              onChange={(event) =>
+                setForm((current) => ({ ...current, preferredContact: event.target.value }))
+              }
+              placeholder="Discord DM first"
             />
           </label>
           <label className="field">
             <span>
-              OTHER_
+              AVAILABILITY_
               <em className="field-hint field-hint-optional">OPTIONAL</em>
             </span>
             <input
               className="input-field"
-              value={form.other}
-              onChange={(event) => setForm((current) => ({ ...current, other: event.target.value }))}
-              placeholder="other contact"
+              value={form.availability}
+              onChange={(event) =>
+                setForm((current) => ({ ...current, availability: event.target.value }))
+              }
+              placeholder="Fri after 19:00, Sat flexible"
             />
           </label>
         </div>

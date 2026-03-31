@@ -34,8 +34,9 @@ export const seedState: SeedState = {
       notes: 'SR6 only. Long-form sessions preferred. Saturdays after 18:00 CET.',
       handles: {
         discord: 'killswitch#2082',
-        instagram: '@killswitch_shadow',
-        other: 'JackPoint relay on request'
+        contactEmail: '',
+        preferredContact: 'Discord DM first',
+        availability: 'Saturdays after 18:00 CET'
       }
     },
     {
@@ -51,8 +52,9 @@ export const seedState: SeedState = {
       notes: 'Prefers matrix-heavy runs and late evening slots.',
       handles: {
         discord: 'zerosum#0442',
-        instagram: '@xerosum_shadow',
-        other: 'Signal relay available on request'
+        contactEmail: '',
+        preferredContact: 'Discord first, relay on request',
+        availability: 'Weeknights after 20:00 CET'
       }
     },
     {
@@ -68,8 +70,9 @@ export const seedState: SeedState = {
       notes: 'Happy to GM extraction, stealth and social jobs. No weekday marathons.',
       handles: {
         discord: 'neonveil#6701',
-        instagram: '@neonveil_art',
-        other: 'Instagram @neonveil_art'
+        contactEmail: '',
+        preferredContact: 'Discord DM',
+        availability: 'Weekends and shorter weekday slots'
       }
     }
   ],

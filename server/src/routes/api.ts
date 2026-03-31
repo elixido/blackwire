@@ -72,8 +72,14 @@ const writeLimiter = rateLimit({
 
 const handlesSchema = z.object({
   discord: z.string().max(80).default(''),
-  instagram: z.string().max(120).default(''),
-  other: z.string().max(120).default('')
+  contactEmail: z
+    .string()
+    .trim()
+    .max(160)
+    .refine((value) => value === '' || z.string().email().safeParse(value).success, 'Invalid contact email.')
+    .default(''),
+  preferredContact: z.string().max(120).default(''),
+  availability: z.string().max(160).default('')
 });
 
 const registerSchema = z.object({
@@ -177,8 +183,9 @@ async function getSessionUser(req: Request) {
 function parseHandles(input: SocialHandles) {
   return {
     discord: input.discord.trim(),
-    instagram: input.instagram.trim(),
-    other: input.other.trim()
+    contactEmail: input.contactEmail.trim().toLowerCase(),
+    preferredContact: input.preferredContact.trim(),
+    availability: input.availability.trim()
   };
 }
 
@@ -268,8 +275,9 @@ router.post(
           display_name,
           password_hash,
           handles_discord,
-          handles_instagram,
-          handles_other,
+          handles_contact_email,
+          handles_preferred_contact,
+          handles_availability,
           notes,
           created_at,
           verified,
@@ -287,8 +295,9 @@ router.post(
         displayName,
         bcrypt.hashSync(input.password, 10),
         handles.discord,
-        handles.instagram,
-        handles.other,
+        handles.contactEmail,
+        handles.preferredContact,
+        handles.availability,
         input.notes.trim(),
         now,
         verified,
@@ -634,12 +643,20 @@ router.patch(
       `
         UPDATE users
         SET handles_discord = $1,
-            handles_instagram = $2,
-            handles_other = $3,
-            notes = $4
-        WHERE id = $5
+            handles_contact_email = $2,
+            handles_preferred_contact = $3,
+            handles_availability = $4,
+            notes = $5
+        WHERE id = $6
       `,
-      [handles.discord, handles.instagram, handles.other, input.notes.trim(), session.user.id]
+      [
+        handles.discord,
+        handles.contactEmail,
+        handles.preferredContact,
+        handles.availability,
+        input.notes.trim(),
+        session.user.id
+      ]
     );
 
     return ok(res, 'PROFILE_UPDATED', 'Account profile updated.', {

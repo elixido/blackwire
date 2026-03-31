@@ -17,8 +17,9 @@ export interface UserRow {
   display_name: string;
   password_hash: string;
   handles_discord: string;
-  handles_instagram: string;
-  handles_other: string;
+  handles_contact_email: string;
+  handles_preferred_contact: string;
+  handles_availability: string;
   notes: string;
   created_at: string;
   verified: boolean;
@@ -147,8 +148,9 @@ function toClientUser(row: UserRow, currentUserId: string | null): User {
     displayName: row.display_name,
     handles: {
       discord: row.handles_discord,
-      instagram: row.handles_instagram,
-      other: row.handles_other
+      contactEmail: row.handles_contact_email,
+      preferredContact: row.handles_preferred_contact,
+      availability: row.handles_availability
     },
     notes: row.notes,
     createdAt: row.created_at,
@@ -376,8 +378,9 @@ export async function initDatabase() {
       display_name TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
       handles_discord TEXT NOT NULL DEFAULT '',
-      handles_instagram TEXT NOT NULL DEFAULT '',
-      handles_other TEXT NOT NULL DEFAULT '',
+      handles_contact_email TEXT NOT NULL DEFAULT '',
+      handles_preferred_contact TEXT NOT NULL DEFAULT '',
+      handles_availability TEXT NOT NULL DEFAULT '',
       notes TEXT NOT NULL DEFAULT '',
       created_at TIMESTAMPTZ NOT NULL,
       verified BOOLEAN NOT NULL DEFAULT false,
@@ -493,8 +496,9 @@ export async function initDatabase() {
 
   await pool.query(`
     ALTER TABLE users ADD COLUMN IF NOT EXISTS handles_discord TEXT NOT NULL DEFAULT '';
-    ALTER TABLE users ADD COLUMN IF NOT EXISTS handles_instagram TEXT NOT NULL DEFAULT '';
-    ALTER TABLE users ADD COLUMN IF NOT EXISTS handles_other TEXT NOT NULL DEFAULT '';
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS handles_contact_email TEXT NOT NULL DEFAULT '';
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS handles_preferred_contact TEXT NOT NULL DEFAULT '';
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS handles_availability TEXT NOT NULL DEFAULT '';
     ALTER TABLE users ADD COLUMN IF NOT EXISTS notes TEXT NOT NULL DEFAULT '';
     ALTER TABLE users ADD COLUMN IF NOT EXISTS verified BOOLEAN NOT NULL DEFAULT false;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_code TEXT;
@@ -562,8 +566,9 @@ export async function initDatabase() {
             display_name,
             password_hash,
             handles_discord,
-            handles_instagram,
-            handles_other,
+            handles_contact_email,
+            handles_preferred_contact,
+            handles_availability,
             notes,
             created_at,
             verified,
@@ -584,8 +589,9 @@ export async function initDatabase() {
           user.displayName,
           bcrypt.hashSync(user.password, 10),
           user.handles.discord,
-          user.handles.instagram,
-          user.handles.other,
+          user.handles.contactEmail,
+          user.handles.preferredContact,
+          user.handles.availability,
           user.notes,
           user.createdAt,
           user.verified,

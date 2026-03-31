@@ -70,12 +70,16 @@ export function PublicProfilePage() {
               <strong>{user.handles.discord || 'NOT_SET'}</strong>
             </div>
             <div>
-              <span>INSTAGRAM</span>
-              <strong>{user.handles.instagram || 'NOT_SET'}</strong>
+              <span>CONTACT_EMAIL</span>
+              <strong>{user.handles.contactEmail || 'NOT_SET'}</strong>
             </div>
             <div>
-              <span>OTHER</span>
-              <strong>{user.handles.other || 'NOT_SET'}</strong>
+              <span>PREFERRED_CONTACT</span>
+              <strong>{user.handles.preferredContact || 'NOT_SET'}</strong>
+            </div>
+            <div>
+              <span>AVAILABILITY</span>
+              <strong>{user.handles.availability || 'NOT_SET'}</strong>
             </div>
           </div>
         </Panel>

@@ -9,16 +9,18 @@ export function AccountPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     discord: currentUser?.handles.discord ?? '',
-    instagram: currentUser?.handles.instagram ?? '',
-    other: currentUser?.handles.other ?? '',
+    contactEmail: currentUser?.handles.contactEmail ?? '',
+    preferredContact: currentUser?.handles.preferredContact ?? '',
+    availability: currentUser?.handles.availability ?? '',
     notes: currentUser?.notes ?? ''
   });
 
   useEffect(() => {
     setForm({
       discord: currentUser?.handles.discord ?? '',
-      instagram: currentUser?.handles.instagram ?? '',
-      other: currentUser?.handles.other ?? '',
+      contactEmail: currentUser?.handles.contactEmail ?? '',
+      preferredContact: currentUser?.handles.preferredContact ?? '',
+      availability: currentUser?.handles.availability ?? '',
       notes: currentUser?.notes ?? ''
     });
   }, [currentUser]);
@@ -44,8 +46,9 @@ export function AccountPage() {
     const result = await updateProfile({
       handles: {
         discord: form.discord,
-        instagram: form.instagram,
-        other: form.other
+        contactEmail: form.contactEmail,
+        preferredContact: form.preferredContact,
+        availability: form.availability
       },
       notes: form.notes
     });
@@ -106,7 +109,7 @@ export function AccountPage() {
 
           <Panel className="detail-panel" accent="pink">
             <form className="form-stack" onSubmit={handleSubmit}>
-              <h2>COMMUNICATION_LINKS</h2>
+              <h2>CONTACT_LINKS</h2>
               <div className="split-fields">
                 <label className="field">
                   <span>DISCORD_</span>
@@ -117,21 +120,35 @@ export function AccountPage() {
                   />
                 </label>
                 <label className="field">
-                  <span>INSTAGRAM_</span>
+                  <span>CONTACT_EMAIL_</span>
                   <input
                     className="input-field"
-                    value={form.instagram}
+                    type="email"
+                    value={form.contactEmail}
                     onChange={(event) =>
-                      setForm((current) => ({ ...current, instagram: event.target.value }))
+                      setForm((current) => ({ ...current, contactEmail: event.target.value }))
+                    }
+                  />
+                  <p className="field-note">PUBLIC_VISIBLE_IF_FILLED</p>
+                </label>
+                <label className="field">
+                  <span>PREFERRED_CONTACT_</span>
+                  <input
+                    className="input-field"
+                    value={form.preferredContact}
+                    onChange={(event) =>
+                      setForm((current) => ({ ...current, preferredContact: event.target.value }))
                     }
                   />
                 </label>
                 <label className="field">
-                  <span>OTHER_</span>
+                  <span>AVAILABILITY_</span>
                   <input
                     className="input-field"
-                    value={form.other}
-                    onChange={(event) => setForm((current) => ({ ...current, other: event.target.value }))}
+                    value={form.availability}
+                    onChange={(event) =>
+                      setForm((current) => ({ ...current, availability: event.target.value }))
+                    }
                   />
                 </label>
               </div>
