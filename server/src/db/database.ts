@@ -551,6 +551,28 @@ export async function initDatabase() {
     );
   `);
 
+  await pool.query(`
+    ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+    ALTER TABLE sessions ENABLE ROW LEVEL SECURITY;
+    ALTER TABLE runners ENABLE ROW LEVEL SECURITY;
+    ALTER TABLE jobs ENABLE ROW LEVEL SECURITY;
+    ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
+    ALTER TABLE mail_messages ENABLE ROW LEVEL SECURITY;
+    ALTER TABLE password_reset_tokens ENABLE ROW LEVEL SECURITY;
+    ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+    ALTER TABLE reports ENABLE ROW LEVEL SECURITY;
+
+    REVOKE ALL ON TABLE users FROM anon, authenticated;
+    REVOKE ALL ON TABLE sessions FROM anon, authenticated;
+    REVOKE ALL ON TABLE runners FROM anon, authenticated;
+    REVOKE ALL ON TABLE jobs FROM anon, authenticated;
+    REVOKE ALL ON TABLE applications FROM anon, authenticated;
+    REVOKE ALL ON TABLE mail_messages FROM anon, authenticated;
+    REVOKE ALL ON TABLE password_reset_tokens FROM anon, authenticated;
+    REVOKE ALL ON TABLE notifications FROM anon, authenticated;
+    REVOKE ALL ON TABLE reports FROM anon, authenticated;
+  `);
+
   const countRow = (await queryOne<CountRow>('SELECT COUNT(*) AS count FROM users')) ?? { count: 0 };
   if (Number(countRow.count) > 0) {
     return;
